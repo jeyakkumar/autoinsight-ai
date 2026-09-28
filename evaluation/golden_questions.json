@@ -1,0 +1,347 @@
+[
+  {
+    "id": "Q01",
+    "question": "Which used vehicles under $30K look attractive?",
+    "relevant_actions": [
+      "price_percentile",
+      "mileage_percentile"
+    ],
+    "irrelevant_actions": [
+      "safety_rating"
+    ],
+    "important_insights": [
+      "Show peer price and mileage evidence."
+    ],
+    "insufficient_evidence_cases": [
+      "Too few matching peers."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q02",
+    "question": "Which SUVs appear unusually cheap?",
+    "relevant_actions": [
+      "price_anomaly",
+      "price_percentile"
+    ],
+    "irrelevant_actions": [
+      "complaint_analysis"
+    ],
+    "important_insights": [
+      "Show anomaly and reference peer set."
+    ],
+    "insufficient_evidence_cases": [
+      "Body style or peer coverage missing."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q03",
+    "question": "Why is this 2022 SUV priced at $24,800?",
+    "relevant_actions": [
+      "price_percentile",
+      "mileage_percentile",
+      "recall_analysis"
+    ],
+    "irrelevant_actions": [],
+    "important_insights": [
+      "Present supported associations, without claiming causation."
+    ],
+    "insufficient_evidence_cases": [
+      "Vehicle identity not specified."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q04",
+    "question": "Find good-value vehicles under $30K without unusual safety signals.",
+    "relevant_actions": [
+      "price_percentile",
+      "recall_analysis",
+      "complaint_analysis",
+      "safety_rating"
+    ],
+    "irrelevant_actions": [],
+    "important_insights": [
+      "Show safety data coverage beside value."
+    ],
+    "insufficient_evidence_cases": [
+      "Missing safety data cannot imply safety."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q05",
+    "question": "What should I investigate before buying this vehicle?",
+    "relevant_actions": [
+      "recall_analysis",
+      "mileage_percentile",
+      "price_anomaly"
+    ],
+    "irrelevant_actions": [],
+    "important_insights": [
+      "Show evidence-backed investigation items."
+    ],
+    "insufficient_evidence_cases": [
+      "Vehicle identity not specified."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q06",
+    "question": "Compare three SUVs for value.",
+    "relevant_actions": [
+      "price_percentile",
+      "mileage_percentile",
+      "fuel_economy"
+    ],
+    "irrelevant_actions": [],
+    "important_insights": [
+      "Compare like-for-like peer groups."
+    ],
+    "insufficient_evidence_cases": [
+      "Three listings not specified."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q07",
+    "question": "Which listings have low mileage for their model year?",
+    "relevant_actions": [
+      "mileage_percentile"
+    ],
+    "irrelevant_actions": [
+      "complaint_analysis"
+    ],
+    "important_insights": [
+      "Show mileage percentile and peer count."
+    ],
+    "insufficient_evidence_cases": [
+      "Mileage missing or invalid."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q08",
+    "question": "Which models have the most recalls in this dataset?",
+    "relevant_actions": [
+      "recall_analysis"
+    ],
+    "irrelevant_actions": [
+      "price_per_mile"
+    ],
+    "important_insights": [
+      "Show deduplicated campaign counts and coverage."
+    ],
+    "insufficient_evidence_cases": [
+      "Recall coverage incomplete."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q09",
+    "question": "Which vehicles have better fuel economy than peers?",
+    "relevant_actions": [
+      "fuel_economy"
+    ],
+    "irrelevant_actions": [
+      "complaint_analysis"
+    ],
+    "important_insights": [
+      "Show units and matched vehicle variant."
+    ],
+    "insufficient_evidence_cases": [
+      "Ambiguous EPA model/trim match."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q10",
+    "question": "Compare hybrid and gas vehicles by price and fuel economy.",
+    "relevant_actions": [
+      "price_percentile",
+      "fuel_economy"
+    ],
+    "irrelevant_actions": [
+      "complaint_analysis"
+    ],
+    "important_insights": [
+      "Show comparable groups and explicit fuel units."
+    ],
+    "insufficient_evidence_cases": [
+      "Fuel types or economy units missing."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q11",
+    "question": "Find suspiciously low-priced listings.",
+    "relevant_actions": [
+      "price_anomaly",
+      "mileage_percentile"
+    ],
+    "irrelevant_actions": [
+      "safety_rating"
+    ],
+    "important_insights": [
+      "Show expected-price evidence and sample size."
+    ],
+    "insufficient_evidence_cases": [
+      "Insufficient year/mileage controls."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q12",
+    "question": "Which listings are below their peer median price?",
+    "relevant_actions": [
+      "price_percentile"
+    ],
+    "irrelevant_actions": [
+      "safety_rating"
+    ],
+    "important_insights": [
+      "Show listing price, median and difference."
+    ],
+    "insufficient_evidence_cases": [
+      "Singleton peer group."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q13",
+    "question": "How does mileage compare for these two listings?",
+    "relevant_actions": [
+      "mileage_percentile"
+    ],
+    "irrelevant_actions": [
+      "recall_analysis"
+    ],
+    "important_insights": [
+      "Show raw mileage and peer percentiles."
+    ],
+    "insufficient_evidence_cases": [
+      "Two listings not specified."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q14",
+    "question": "Which vehicles have high complaint activity?",
+    "relevant_actions": [
+      "complaint_analysis"
+    ],
+    "irrelevant_actions": [
+      "price_per_mile"
+    ],
+    "important_insights": [
+      "Show complaint coverage and comparison basis."
+    ],
+    "insufficient_evidence_cases": [
+      "No exposure denominator for rate claims."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q15",
+    "question": "Compare crash ratings for these vehicles.",
+    "relevant_actions": [
+      "safety_rating"
+    ],
+    "irrelevant_actions": [
+      "price_percentile"
+    ],
+    "important_insights": [
+      "Show rating scale and vehicle variant."
+    ],
+    "insufficient_evidence_cases": [
+      "Unrated vehicles or ambiguous variants."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q16",
+    "question": "How does listing price vary by model year?",
+    "relevant_actions": [
+      "depreciation"
+    ],
+    "irrelevant_actions": [
+      "recall_analysis"
+    ],
+    "important_insights": [
+      "Show year cohorts, with cross-sectional limitations."
+    ],
+    "insufficient_evidence_cases": [
+      "Sparse cohorts or confounded trim mix."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q17",
+    "question": "Calculate price per mile for these listings.",
+    "relevant_actions": [
+      "price_per_mile"
+    ],
+    "irrelevant_actions": [
+      "safety_rating"
+    ],
+    "important_insights": [
+      "Show price/mileage units without calling the ratio a value guarantee."
+    ],
+    "insufficient_evidence_cases": [
+      "Zero or missing mileage."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q18",
+    "question": "Does a low price alone make this listing good value?",
+    "relevant_actions": [
+      "price_percentile",
+      "mileage_percentile",
+      "recall_analysis"
+    ],
+    "irrelevant_actions": [],
+    "important_insights": [
+      "Show value evidence and investigation gaps."
+    ],
+    "insufficient_evidence_cases": [
+      "Missing mileage or recall enrichment."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q19",
+    "question": "Can you assess a model with only one listing?",
+    "relevant_actions": [
+      "price_percentile",
+      "mileage_percentile"
+    ],
+    "irrelevant_actions": [],
+    "important_insights": [
+      "Report insufficient peer evidence."
+    ],
+    "insufficient_evidence_cases": [
+      "Exactly one peer."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  },
+  {
+    "id": "Q20",
+    "question": "Should a vehicle with no matched recall record be considered safe?",
+    "relevant_actions": [
+      "recall_analysis",
+      "safety_rating"
+    ],
+    "irrelevant_actions": [
+      "price_per_mile"
+    ],
+    "important_insights": [
+      "Distinguish no match from no recalls."
+    ],
+    "insufficient_evidence_cases": [
+      "Missing enrichment is not evidence of safety."
+    ],
+    "label_status": "draft_requires_dataset_review"
+  }
+]

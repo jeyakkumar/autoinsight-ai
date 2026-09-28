@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {"id": "used_car_listings", "phase": 1, "url": "https://github.com/rebrowser/autotrader-dataset", "raw_url": "https://github.com/rebrowser/autotrader-dataset/tree/main/car-listings/data", "license_status": "review_required", "downloaded": false, "freshness": "daily preview"},
+    {"id": "epa_vehicle_data", "phase": 1, "url": "https://www.epa.gov/automotive-trends/explore-automotive-trends-data", "alternate_url": "https://www.epa.gov/compliance-and-fuel-economy-data/data-cars-used-testing-fuel-economy", "license_status": "review_required", "downloaded": false},
+    {"id": "nhtsa_recalls", "phase": 1, "url": "https://www.nhtsa.gov/nhtsa-datasets-and-apis", "license_status": "review_required", "downloaded": false},
+    {"id": "nhtsa_complaints", "phase": 2, "url": "https://www.nhtsa.gov/nhtsa-datasets-and-apis", "license_status": "review_required", "downloaded": false},
+    {"id": "nhtsa_safety", "phase": 2, "url": "https://www.nhtsa.gov/nhtsa-datasets-and-apis", "license_status": "review_required", "downloaded": false}
+  ]
+}

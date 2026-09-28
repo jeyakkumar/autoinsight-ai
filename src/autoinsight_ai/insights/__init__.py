@@ -1,0 +1,1 @@
+"""AutoInsight insights components."""

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autoinsight-ai"
+version = "0.1.0"
+description = "Vehicle analytics with separate planning, selection, and evidence verification"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = [
+  "duckdb>=1.1,<2",
+  "fastapi>=0.115,<1",
+  "httpx>=0.27,<1",
+  "pandas>=2.2,<4",
+  "pyarrow>=18,<24",
+  "pydantic>=2.9,<3",
+  "pydantic-settings>=2.5,<3",
+  "streamlit>=1.39,<2",
+  "uvicorn[standard]>=0.30,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/autoinsight_ai"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
