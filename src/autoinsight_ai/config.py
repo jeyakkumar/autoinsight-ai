@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     investigate_threshold: float = Field(default=0.60, ge=0, le=1)
     min_peer_count: int = Field(default=10, ge=2)
     max_additional_analysis: int = Field(default=1, ge=0)
+    openrouter_api_key: str | None = Field(default=None, validation_alias="OPENROUTER_API_KEY")
+    jev_model: str = Field(default="~typesafe/jev-latest", validation_alias="JEV_MODEL")
 
     @model_validator(mode="after")
     def check_thresholds(self) -> "Settings":

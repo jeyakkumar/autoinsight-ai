@@ -11,6 +11,7 @@ import httpx
 import pandas as pd
 
 from autoinsight_ai.analysis.engine import execute_actions
+from autoinsight_ai.config import Settings
 from autoinsight_ai.ingestion.nhtsa import lookup_vehicle
 from autoinsight_ai.planning.actions import action_description
 from autoinsight_ai.planning.intents import parse_intent
@@ -148,22 +149,38 @@ def _live_clm(question: str, candidates: list[str], base_url: str) -> dict[str, 
 
 
 def _live_jev(evidence: dict[str, Any]) -> dict[str, Any] | None:
-    key = os.getenv("OPENROUTER_API_KEY")
+    settings = Settings()
+    key = os.getenv("OPENROUTER_API_KEY") or settings.openrouter_api_key
     if not key:
-        return None
+        return {"status": "live_unavailable", "reason": "OPENROUTER_API_KEY is not configured"}
     try:
         response = httpx.post(
             "https://openrouter.ai/api/alpha/decisions",
             headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
             json={
-                "model": os.getenv("JEV_MODEL", "~typesafe/jev-latest"),
-                "input": {
-                    "state": evidence,
-                    "questions": {
-                        "price_claim_supported": {"type": "noul"},
-                        "value_claim_supported": {"type": "noul"},
-                        "safety_claim_supported": {"type": "noul"},
-                        "ranking_claim_supported": {"type": "noul"},
+                "model": os.getenv("JEV_MODEL") or settings.jev_model,
+                "state": evidence,
+                "questions": {
+                    "price_claim_supported": {
+                        "type": "noul",
+                        "instructions": "Does the supplied peer evidence support the price claim?",
+                    },
+                    "value_claim_supported": {
+                        "type": "noul",
+                        "instructions": "Does the supplied evidence support the value-index claim?",
+                    },
+                    "safety_claim_supported": {
+                        "type": "noul",
+                        "instructions": (
+                            "Does the supplied evidence support a safety claim? "
+                            "Missing recalls or ratings are not evidence of safety."
+                        ),
+                    },
+                    "ranking_claim_supported": {
+                        "type": "noul",
+                        "instructions": (
+                            "Does the supplied dataset evidence support the ranking claim?"
+                        ),
                     },
                 },
             },
@@ -171,8 +188,8 @@ def _live_jev(evidence: dict[str, Any]) -> dict[str, Any] | None:
         )
         response.raise_for_status()
         return {"status": "live", "response": response.json()}
-    except (httpx.HTTPError, ValueError, TypeError):
-        return None
+    except (httpx.HTTPError, ValueError, TypeError) as exc:
+        return {"status": "live_unavailable", "reason": f"{type(exc).__name__}: {exc}"}
 
 
 def _fallback_jev(evidence: dict[str, Any], source: dict[str, Any] | None) -> dict[str, Any]:
@@ -274,17 +291,20 @@ def run_chat(
             "listing_count": int(top.listing_count),
             "dataset_rows": int(len(result)),
         }
-        ranking_jev = _live_jev(ranking_evidence) if live_models else None
-        ranking_jev = (
-            _normalize_jev(ranking_jev)
-            if ranking_jev
-            else {
+        if live_models:
+            ranking_live = _live_jev(ranking_evidence)
+            ranking_jev = (
+                _normalize_jev(ranking_live)
+                if ranking_live.get("status") == "live"
+                else ranking_live
+            )
+        else:
+            ranking_jev = {
                 "status": "demo_fallback",
                 "decisions": {"ranking_claim_supported": True},
                 "surface": True,
                 "reason": "The ranking is computed directly from the loaded listing rows.",
             }
-        )
         if not ranking_jev.get("decisions", {}).get("ranking_claim_supported", True):
             answer = (
                 "I found a candidate listing ranking, but JEV could not verify the ranking claim."
@@ -355,15 +375,19 @@ def run_chat(
                 f"is ${abs(price_change):,.0f} {'higher' if price_change >= 0 else 'lower'} "
                 f"at ${second.median_price:,.0f} across {int(second.listing_count)} listings."
             )
-        comparison_jev = (
-            {
+        if live_models:
+            comparison_live = _live_jev(comparison_evidence)
+            comparison_jev = (
+                _normalize_jev(comparison_live)
+                if comparison_live.get("status") == "live"
+                else comparison_live
+            )
+        else:
+            comparison_jev = {
                 "status": "demo_fallback",
                 "decisions": {"comparison_claim_supported": len(comparison_rows) >= 2},
                 "surface": len(comparison_rows) >= 2,
             }
-            if not live_models
-            else _normalize_jev(_live_jev(comparison_evidence) or {})
-        )
         return {
             "question": question,
             "answer": answer,
@@ -388,12 +412,11 @@ def run_chat(
             (item for item in load_source_catalog()["sources"] if item["id"] == "nhtsa_recalls"),
             None,
         )
-    jev = (
-        _live_jev({"question": question, "evidence": evidence, "source": source})
-        if live_models
-        else None
-    )
-    jev = _normalize_jev(jev) if jev else _fallback_jev(evidence, source)
+    if live_models:
+        live_jev = _live_jev({"question": question, "evidence": evidence, "source": source})
+        jev = _normalize_jev(live_jev) if live_jev.get("status") == "live" else live_jev
+    else:
+        jev = _fallback_jev(evidence, source)
     value = evidence.get("value_index")
     if not matched:
         if not same_model.empty:
