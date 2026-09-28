@@ -1,0 +1,20 @@
+flowchart LR
+    U["User chat question"] --> I["Intent parser\nvehicle / comparison / ranking / source"]
+    I --> C["CLM action selector\nrank allowed investigations"]
+    C --> A["Deterministic analytics\nprice · mileage · fuel · value · comparison"]
+    I --> D["Vehicle resolver\nmake · model · year\ntypo and alias tolerant"]
+    D --> A
+    I --> S["Source planner"]
+    S --> R["sources.json registry"]
+    R --> N["NHTSA .gov APIs\nrecalls · complaints · safety"]
+    A --> E["Evidence bundle\npeer counts · medians · ranges · provenance"]
+    N --> E
+    E --> J["JEV claim verifier\nprice · value · comparison · safety"]
+    J --> G{"Claim supported?"}
+    G -->|yes| O["Response composer\nanswer + evidence + sources"]
+    G -->|no| Q["Caveat or follow-up\nmissing evidence is explicit"]
+    O --> U
+    Q --> U
+    C -. "live local endpoint or explicit fallback" .-> T["Decision trace"]
+    J -. "live OpenRouter or explicit fallback" .-> T
+    E -. "structured telemetry" .-> T

@@ -1,6 +1,7 @@
 """Small, inspectable chat orchestrator for the Streamlit demonstration."""
 
 import json
+import math
 import os
 import re
 from difflib import SequenceMatcher
@@ -35,6 +36,19 @@ def _display_model(value: Any) -> str:
 
 def _normalized_name(value: Any) -> str:
     return re.sub(r"[^a-z0-9]", "", str(value).lower())
+
+
+def _json_safe(value: Any) -> Any:
+    """Convert pandas/numpy values into strict JSON, mapping NaN to null."""
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    if hasattr(value, "item"):
+        return _json_safe(value.item())
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
 
 
 def _vehicle_from_question(question: str, frame: pd.DataFrame) -> dict[str, Any]:
@@ -159,7 +173,7 @@ def _live_jev(evidence: dict[str, Any]) -> dict[str, Any] | None:
             headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
             json={
                 "model": os.getenv("JEV_MODEL") or settings.jev_model,
-                "state": evidence,
+                "state": _json_safe(evidence),
                 "questions": {
                     "price_claim_supported": {
                         "type": "noul",
